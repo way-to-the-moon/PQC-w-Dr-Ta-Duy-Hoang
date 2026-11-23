@@ -19,7 +19,7 @@ Also, the output must be random. Changing 1 input bit should cause half of outpu
 ## SHA-3
 > SDitH implements SHA-3. SHA-3 is based on **Keccak** algorithm.
 
-### Keccak
+## Keccak
 
 > uses a sponge construction to process input data of arbitrary length and produce a hash output.
 
@@ -29,7 +29,7 @@ The sponge construction consists of two main phases:
 
 - Squeezing: The hash output is extracted from the internal state.
 
-### State
+## State
 
 Keccak uses an internal state represented by a three-dimensional array:
 
@@ -55,7 +55,7 @@ A[0][4]  A[1][4]  A[2][4]  A[3][4]  A[4][4]
 
 Each element represents a 64-bit lane.
 
-### Rate and capacity
+## Rate and capacity
 
 The internal state is divided into two parts:
 
@@ -78,11 +78,11 @@ $$1600 = 1088 + 512$$
 
 The rate determines how many input bits can be processed in each absorption block, while the capacity is an important security parameter.
 
-### Sponge Construction
+## Sponge Construction
 
 The sponge construction has two main phases:
 
-### Absorbing Phase
+### 1. Absorbing Phase
 
 The input message is first padded according to the padding rule of the specific Keccak-based function, then the padded message is divided into blocks of r bits.
 
@@ -107,7 +107,7 @@ Where:
 
 - f is the Keccak-f permutation.
 
-### Squeezing Phase
+### 2. Squeezing Phase
 
 After all input blocks have been absorbed:
 
@@ -119,6 +119,15 @@ Continue extracting output until the requested output length is reached.
 
 (Eg: SHA3-256 -> output length is 256 bits.)
 
+## Keccak-f[1600] Permutation
+
+Keccak-f[1600] is the core permutation function of Keccak. Transforms the 1600-bit internal state through 24 rounds. Each round consists of five steps:
+
+1. Theta (θ)
+2. Rho (ρ)
+3. Pi (π)
+4. Chi (χ)
+5. Iota (ι)
 
 ### Theta (θ)
 
@@ -140,7 +149,7 @@ The column indices are calculated modulo 5.
 
 Theta helps propagate changes across different columns of the state.
 
-5.2. Rho (ρ)
+### Rho (ρ)
 
 Purpose: Rotate the bits within each lane.
 
@@ -150,7 +159,7 @@ Unlike a normal bit shift, a rotation preserves all bits. Bits shifted out from 
 
 This operation changes the positions of bits within each lane.
 
-5.3. Pi (π)
+### Pi (π)
 
 Purpose: Rearrange the positions of lanes in the state.
 
@@ -162,7 +171,7 @@ Pi moves each lane to a different position in the 5 × 5 state array.
 
 While Rho changes bit positions within a lane, Pi changes the positions of entire lanes.
 
-5.4. Chi (χ)
+### Chi (χ)
 
 Purpose: Introduce non-linearity into the state transformation.
 
@@ -176,7 +185,7 @@ Chi uses NOT, AND, and XOR operations.
 
 It is the non-linear step of the Keccak round and plays an important role in providing cryptographic security.
 
-5.5. Iota (ι)
+### Iota (ι)
 
 Purpose: Break symmetry between rounds.
 
