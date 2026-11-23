@@ -152,14 +152,37 @@ Mỗi chữ ký Dilithium "rò" chút thông tin về khóa bí mật. Rejection
 ### Lớp 2: Lattice và SVP
 - **Lattice** = mọi tổ hợp tuyến tính **nguyên** của các vector độc lập $b_1, \dots, b_n$ (basis):
   $$L(B) = \{\, c_1 b_1 + \cdots + c_n b_n : c_i \in \mathbb{Z} \,\} = \{\, Bx : x \in \mathbb{Z}^n \,\}$$
+
+  Dễ hiểu: Lattice - mạng tinh thể là một tập hợp các điểm phân bố đều đặn trong không gian nhiều chiều.
+
+  Ví dụ, trong mặt phẳng 2D có 2 vector cơ s(basis) là b1 và b2. Từ 2 thằng này có thể tạo vô hạn điểm v = x1b1 + x2b2. Tập các điểm v là lattice.
 - Một lattice có **vô số basis**: $B' = B\,U$, $U$ nguyên với $\det U = \pm 1$ (unimodular, Định lý 2.9).
 - **Basis tốt** (ngắn, gần vuông góc) → bài toán dễ. **Basis xấu** → khó. Mật mã lattice khai thác bất đối xứng này.
 - $\mathrm{vol}(L) = \lvert \det B \rvert$ bất biến theo basis. $\lambda_1(L)$ = độ dài vector khác 0 ngắn nhất.
 - **Gaussian heuristic:**
   $$\lambda_1(L) \approx \sqrt{\frac{n}{2\pi e}}\;\mathrm{vol}(L)^{1/n}$$
-- **SVP**: tìm vector ngắn nhất (NP-hard). **approx-SVP**: tìm $v \neq 0$ với $\lVert v \rVert \le \gamma\,\lambda_1(L)$. **CVP**: điểm lattice gần $t$ nhất.
-- Thuật toán tốt nhất vẫn mũ: cổ điển $2^{0.292n}$, lượng tử $2^{0.256n}$.
-- Ví dụ 2.24 (Babai rounding): basis tốt tìm điểm gần dễ, basis xấu thì sai.
+
+
+- **SVP(Shortest Vector Problem)**: tìm vector ngắn nhất. Hãy tưởng tượng mình có một lattice với hàng triệu điểm. Nhiệm vụ của mình là tìm điểm khác gốc tọa độ gần gốc tọa độ nhất.
+
+   **approx-SVP**: tìm $v \neq 0$ với $\lVert v \rVert \le \gamma\,\lambda_1(L)$. **CVP**: điểm lattice gần $t$ nhất.
+
+   Tại sao SVP khó? Khi nghe mô tả có vẻ dễ, chỉ cần tìm khoảng cách và xem vector nào ngắn nhất. Có một điểm dễ gây nhầm lẫn: Tìm các vector cơ sở không đồng nghĩa với tìm được vector ngắn nhất trong lattice.
+
+   một lattice có thể có basis rất dài nhưng vẫn chứa những vector cực ngắn.
+  Trong không gian nhiều chiều, việc xác định vector ngắn nhất trở thành một bài toán tính toán rất khó.
+
+#### SVP liên quan gì mật mã? 
+  Ý tưởng cơ bản của lattice-based cryptography là:
+1. Xây dựng một cấu trúc toán học liên quan đến lattice.
+2. Tạo ra một bài toán mà người dùng hợp lệ có thể giải hiệu quả nhờ thông tin bí mật.
+3. Kẻ tấn công chỉ có thông tin công khai và phải giải một bài toán lattice khó để phá hệ thống.
+
+Có thể hiểu theo cách sau:
+- EUF-CMA là tiêu chuẩn mà ta muốn hệ thống đạt được.
+- Lattice và các bài toán liên quan cung cấp nền tảng toán học để xây dựng hệ thống.
+- SVP giúp ta hiểu tại sao việc giải các bài toán lattice có thể rất khó.
+- Dilithium là một ứng dụng cụ thể kết hợp những ý tưởng này.
 ### Lớp 3: SIS và LWE
 **SIS:** cho $A \in \mathbb{Z}_q^{n \times m}$ ngẫu nhiên ($m > n$), tìm $z \neq 0$ **ngắn** với
  
@@ -176,6 +199,7 @@ tìm $s$.
 - **DLWE:** phân biệt $(A,\ As+e)$ với $(A,\ r)$ ngẫu nhiên. Định lý 4.6: LWE $\Leftrightarrow$ DLWE.
 - Góc nhìn lattice: $b$ gần điểm lattice $As$ → CVP/BDD → uSVP (primal attack).
 - **ss-LWE:** bí mật $s$ cũng nhỏ. Dilithium dùng dạng này.
+
 | | SIS | LWE |
 |---|---|---|
 | Cần tìm | Vector ngắn $z$, $Az \equiv 0$ | Bí mật $s$ trong $b = As + e$ |
