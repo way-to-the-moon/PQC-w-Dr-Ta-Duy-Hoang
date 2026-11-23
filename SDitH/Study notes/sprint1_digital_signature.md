@@ -1,7 +1,5 @@
 # Sprint 1: Digital Signature
 
-> In this sprint, I have managed to grasp basic knowledge about public/secret keys and the combination of three types of algorithm in the encrypting process.
-
 **Mechanism:**
 
 > When a message is on the way to its destination, it can be intercepted and its content might be exposed and tamperable. We can solve the problem by sending the message via a fully private channel, or implement security methods so that even when attackers intercept our messages, they cannot exploit. 
